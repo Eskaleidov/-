@@ -1,0 +1,47 @@
+// Задача коммивояжёра
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int main() {
+    int n = 4;
+    vector<vector<int>> graph = {
+        {0, 10, 15, 20},
+        {10, 0, 35, 25},
+        {15, 35, 0, 30},
+        {20, 25, 30, 0}
+    };
+
+    vector<int> cities;
+    for (int i = 0; i < n; ++i) {
+        cities.push_back(i);
+    }
+
+    int min_path = INT_MAX;
+    vector<int> best_path;
+
+    do {
+        int current_path = 0;
+        for (int i = 0; i < n - 1; ++i) {
+            current_path += graph[cities[i]][cities[i + 1]];
+        }
+        current_path += graph[cities[n - 1]][cities[0]];
+
+        if (current_path < min_path) {
+            min_path = current_path;
+            best_path = cities;
+        }
+    } while (next_permutation(cities.begin() + 1, cities.end()));
+
+    cout << "Минимальная длина пути: " << min_path << endl;
+    cout << "Оптимальный маршрут: ";
+    for (int city : best_path) {
+        cout << city << " ";
+    }
+    cout << best_path[0] << endl;
+
+    return 0;
+}
