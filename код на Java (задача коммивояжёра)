@@ -1,0 +1,59 @@
+// Задача коммивояжёра
+import java.util.*;
+
+public class Main {  // Изменили TSP на Main
+    public static void main(String[] args) {
+        int n = 4;
+        int[][] graph = {
+            {0, 10, 15, 20},
+            {10, 0, 35, 25},
+            {15, 35, 0, 30},
+            {20, 25, 30, 0}
+        };
+
+        List<Integer> cities = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            cities.add(i);
+        }
+
+        int minPath = Integer.MAX_VALUE;
+        List<Integer> bestPath = new ArrayList<>();
+
+        do {
+            int currentPath = 0;
+            for (int i = 0; i < n - 1; i++) {
+                currentPath += graph[cities.get(i)][cities.get(i + 1)];
+            }
+            currentPath += graph[cities.get(n - 1)][cities.get(0)];
+
+            if (currentPath < minPath) {
+                minPath = currentPath;
+                bestPath = new ArrayList<>(cities);
+            }
+        } while (nextPermutation(cities));
+
+        System.out.println("Минимальная длина пути: " + minPath);
+        System.out.print("Оптимальный маршрут: ");
+        for (int city : bestPath) {
+            System.out.print(city + " ");
+        }
+        System.out.println(bestPath.get(0));
+    }
+
+    private static boolean nextPermutation(List<Integer> array) {
+        int i = array.size() - 2;
+        while (i >= 1 && array.get(i) >= array.get(i + 1)) {
+            i--;
+        }
+        if (i < 1) return false;
+
+        int j = array.size() - 1;
+        while (array.get(j) <= array.get(i)) {
+            j--;
+        }
+
+        Collections.swap(array, i, j);
+        Collections.reverse(array.subList(i + 1, array.size()));
+        return true;
+    }
+}
